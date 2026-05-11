@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiverso ad Acquerello</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: #0b0e1a;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        /* CIELO DIPINTO AD ACQUERELLO */
+        #universe {
+            position: relative;
+            width: 100vw; height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 20%, #2e3b8f 0%, transparent 40%),
+                radial-gradient(circle at 80% 10%, #4b1d5e 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #1a2a4d 0%, transparent 60%),
+                radial-gradient(circle at 30% 80%, #632c5a 0%, transparent 40%),
+                radial-gradient(circle at 70% 90%, #1e5a6e 0%, transparent 40%);
+            filter: contrast(120%) brightness(110%);
+        }
+
+        #universe::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.05;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            pointer-events: none;
+        }
+
+        /* TITOLO RESPONSIVE E PROTETTO */
+        .star-wars-container {
+            position: absolute;
+            top: 5%; left: 50%;
+            transform: translateX(-50%) perspective(300px) rotateX(25deg);
+            text-align: center;
+            z-index: 50; /* Superiore alle stelle */
+            pointer-events: none;
+            width: 90%;
+        }
+
+        .title {
+            font-size: clamp(30px, 8vw, 70px); /* Si ridimensiona col device */
+            color: #FFE81F;
+            margin: 0;
+            -webkit-text-stroke: 1px #000;
+            filter: drop-shadow(0 0 15px rgba(255, 232, 31, 0.5));
+            letter-spacing: 4px;
+        }
+
+        .subtitle {
+            font-size: clamp(10px, 3vw, 22px);
+            color: #FFE81F;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+        }
+
+        /* STELLE GIALLE PULSANTI */
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10; /* Inferiore al titolo */
+            box-shadow: 0 0 12px 3px #fff, 0 0 20px 8px #ffeb3b;
+            animation: twinkleYellow 3s infinite ease-in-out;
+            transition: all 0.5s ease-in-out;
+        }
+
+        @keyframes twinkleYellow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 18px 6px #fff, 0 0 35px 15px #ffeb3b; }
+        }
+
+        /* MODALE RESPONSIVE (AL CLICK) */
+        .star.active {
+            position: fixed;
+            top: 50% !important;
+            left: 50% !important;
+            width: min(80vw, 480px) !important; /* Non supera l'80% dello schermo */
+            height: min(80vw, 480px) !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 1000;
+            background: transparent;
+            box-shadow: none;
+            animation: none;
+        }
+
+        .star img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            opacity: 0;
+            object-fit: cover; 
+            display: none;
+            filter: brightness(1.1) saturate(1.2);
+            border: 5px solid rgba(255, 255, 255, 0.5);
+            box-sizing: border-box;
+        }
+
+        .star.active img {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Rimossa .comet e animazione kamehameha */
+    </style>
+</head>
+<body>
+
+    <div id="universe">
+        <div class="star-wars-container">
+            <h1 class="title">MULTIVERSO</h1>
+            <div class="subtitle">costellazione della classe</div>
+        </div>
+    </div>
+
+    <script>
+        const universe = document.getElementById('universe');
+        const images = ['1.jpeg', '2.jpeg', '3.jpeg', '4.jpeg', '5.jpeg', '7.jpeg', '8.jpeg', '9.jpeg', '10.jpeg', '11.jpeg', '12.jpeg', '13.jpeg', '14.jpeg', '15.jpeg', '16.jpeg', '17.jpeg', '18.jpeg', '19.jpeg'];
+
+        for (let i = 0; i < images.length; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Dimensioni variabili
+            const size = Math.random() * 5 + 6;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            
+            // Posizionamento intelligente: evita la fascia alta del titolo (0-25%)
+            star.style.left = Math.random() * 85 + 7 + '%';
+            star.style.top = Math.random() * 60 + 30 + '%'; 
+            
+            star.style.animationDelay = Math.random() * 3 + 's';
+
+            const img = document.createElement('img');
+            img.src = images[i];
+            star.appendChild(img);
+            universe.appendChild(star);
+
+            star.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = star.classList.contains('active');
+                document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+                if (!isActive) star.classList.add('active');
+            });
+        }
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+        });
+    </script>
+</body>
+</html>
